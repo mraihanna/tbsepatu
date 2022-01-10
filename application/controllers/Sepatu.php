@@ -1,15 +1,16 @@
 <?php
 
-class Sepatu extends CI_Controller {
+class Sepatu extends CI_Controller
+{
 
     public function __construct()
     {
         parent::__construct();
         $this->load->model('Sepatu_model');
         $this->load->library('form_validation');
-        if($this->session->userdata('status') != "login"){
-			redirect(base_url("login"));
-		}
+        if ($this->session->userdata('status') != "login") {
+            redirect(base_url("login"));
+        }
     }
 
 
@@ -17,20 +18,19 @@ class Sepatu extends CI_Controller {
     {
         $data['judul'] = 'Halaman Data Sepatu';
         $data['sepatu'] = $this->Sepatu_model->getAllSepatu();
-        if( $this->input->post('keyword')){
+        if ($this->input->post('keyword')) {
             $data['sepatu'] = $this->Sepatu_model->cariDataSepatu();
         }
 
         $this->load->view('templates/header', $data);
         $this->load->view('sepatu/index', $data);
         $this->load->view('templates/footer');
-
     }
 
     public function tambah()
     {
         $data["judul"] = 'Form Tambah Data Sepatu';
-        
+
 
         $this->form_validation->set_rules('Merk_Sepatu', 'Merk Sepatu', 'valid_base64|required');
         $this->form_validation->set_rules('Jenis_Sepatu', 'Jenis Sepatu', 'required');
@@ -40,12 +40,11 @@ class Sepatu extends CI_Controller {
         $this->form_validation->set_rules('Tanggal_Pesanan', 'Tanggal Pesanan', 'required');
 
 
-        if( $this->form_validation->run() == FALSE ){
+        if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header', $data);
             $this->load->view('sepatu/tambah');
             $this->load->view('templates/footer');
-        }
-        else {
+        } else {
             $this->Sepatu_model->tambahDataSepatu();
             $this->session->set_flashdata('flash', ' Ditambahkan');
             redirect('sepatu');
@@ -82,16 +81,14 @@ class Sepatu extends CI_Controller {
         $this->form_validation->set_rules('Stok_Sepatu', 'Stok', 'required');
         $this->form_validation->set_rules('Tanggal_Pesanan', 'Tanggal Pesanan', 'required');
 
-        if( $this->form_validation->run() == FALSE ){
+        if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header', $data);
             $this->load->view('sepatu/ubah', $data);
             $this->load->view('templates/footer');
-        }
-        else {
+        } else {
             $this->Sepatu_model->ubahDataSepatu($id);
             $this->session->set_flashdata('flash', ' diubah');
             redirect('sepatu');
         }
     }
-
 }
